@@ -7,38 +7,35 @@ import {ProductsList} from './screens/ProductList';
 import {Cart} from './screens/Cart';
 import {CartIcon} from './components/CartIcon';
 import {LogoIcon} from './components/LogoIcon';
-import {CartProvider} from './CartContext';
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   return (
-    <CartProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Products"
-            component={ProductsList}
-            options={({navigation}) => ({
-              title: 'Store',
-              headerTitleStyle: styles.headerTitle,
-              headerRight: () => <CartIcon navigation={navigation} />,
-              headerLeft: () => <LogoIcon navigation={navigation} />,
-            })}
-          />
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Products"
+          component={ProductsList}
+          options={({navigation}) => ({
+            title: 'Store',
+            headerTitleStyle: styles.headerTitle,
+            headerRight: () => <CartIcon navigation={navigation} />,
+            headerLeft: () => <LogoIcon navigation={navigation} />,
+          })}
+        />
 
-          <Stack.Screen
-            name="Cart"
-            component={Cart}
-            options={({navigation}) => ({
-              title: 'My Cart',
-              headerTitleStyle: styles.headerTitle,
-              headerRight: () => <CartIcon navigation={navigation} />,
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </CartProvider>
+        <Stack.Screen
+          name="Cart"
+          component={Cart}
+          options={({navigation}) => ({
+            title: 'My Cart',
+            headerTitleStyle: styles.headerTitle,
+            headerRight: () => <CartIcon navigation={navigation} />,
+          })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

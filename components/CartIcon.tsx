@@ -1,11 +1,9 @@
 import React from 'react';
-import {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-
-import {CartContext} from '../CartContext';
+import useCartStore from '../CartZustand';
 
 export function CartIcon({navigation}: any): JSX.Element {
-  const {getItemsCount} = useContext(CartContext); //Gettings Items in cart.
+  const itemCount = useCartStore(state => state.itemCount);
   return (
     <View style={styles.container}>
       <Text
@@ -13,7 +11,7 @@ export function CartIcon({navigation}: any): JSX.Element {
         onPress={() => {
           navigation.navigate('Cart');
         }}>
-        Cart ({getItemsCount()})
+        Cart ({itemCount})
       </Text>
     </View>
   );

@@ -1,15 +1,17 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
-
-import {CartContext} from '../CartContext';
+import useCartStore from '../CartZustand';
 
 export function Cart(): JSX.Element {
-  const {items, getTotalPrice} = useContext(CartContext);
+  const items = useCartStore(state => state.cart);
+  const getTotalPrice = useCartStore(state => state.getTotalPrice);
+  const totalPrice = useCartStore(state => state.totalPrice);
 
   function Totals() {
     let [total, setTotal] = useState(0);
     useEffect(() => {
-      setTotal(getTotalPrice());
+      getTotalPrice();
+      setTotal(totalPrice);
     }, []);
     return (
       <View style={styles.cartLineTotal}>
@@ -37,7 +39,7 @@ export function Cart(): JSX.Element {
       contentContainerStyle={styles.itemsListContainer}
       data={items}
       renderItem={renderItem}
-      keyExtractor={item => item.product.id.toString()}
+      keyExtractor={item => item.id.toString()}
       ListFooterComponent={Totals}
     />
   );
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     color: '#333333',
     textAlign: 'right',
+    width: '50%',
   },
   itemsList: {
     backgroundColor: '#eeeeee',

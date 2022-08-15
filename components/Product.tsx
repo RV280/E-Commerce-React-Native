@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {
   Text,
   Image,
@@ -8,7 +8,7 @@ import {
   Button,
   ImageSourcePropType,
 } from 'react-native';
-import {CartContext} from '../CartContext';
+import useCartStore from '../CartZustand';
 
 export type ProductType = {
   name: string;
@@ -18,7 +18,7 @@ export type ProductType = {
 };
 
 export function Product({name, price, image, id}: ProductType): JSX.Element {
-  const {addItemToCart} = useContext(CartContext);
+  const addItemToCart = useCartStore(state => state.addItemToCart);
 
   function onAddToCart(): void {
     addItemToCart(id);
