@@ -1,25 +1,26 @@
 import create from 'zustand';
-import {getProduct, ProductItem} from './services/ProductsService';
+import {ProductType} from './components/Product';
 
 type CartItem = {
-  product: ProductItem | undefined;
+  title: string;
+  price: number;
   id: number;
   qty: number;
   totalPrice: number;
 };
+
 interface cartStoreType {
   cart: CartItem[];
   totalPrice: number;
   itemCount: number;
-  addItemToCart: (id: number) => void;
+  addItemToCart: ({title, price, imageUrl, id}: ProductType) => void;
   getTotalPrice: () => void;
 }
 const cartStore = (set: any) => ({
   cart: [],
   totalPrice: 0,
   itemCount: 0,
-  addItemToCart: (id: number) => {
-    const product: ProductItem | undefined = getProduct(id);
+  addItemToCart: ({title, price, imageUrl, id}: ProductType) => {
     set((state: any) => ({
       cart: state.cart.find((currItem: CartItem) => currItem.id === id)
         ? state.cart.map((currItem: CartItem) =>
@@ -27,7 +28,7 @@ const cartStore = (set: any) => ({
               ? {
                   ...currItem,
                   qty: currItem.qty + 1,
-                  totalPrice: currItem.totalPrice + product!.price,
+                  totalPrice: currItem.totalPrice + price,
                 }
               : currItem,
           )
@@ -36,8 +37,10 @@ const cartStore = (set: any) => ({
             {
               id,
               qty: 1,
-              product,
-              totalPrice: product!.price,
+              price,
+              title,
+              imageUrl,
+              totalPrice: price,
             },
           ],
       itemCount:

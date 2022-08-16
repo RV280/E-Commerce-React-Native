@@ -24,9 +24,9 @@ export function Cart(): JSX.Element {
   function renderItem({item}: any): JSX.Element {
     return (
       <View style={styles.cartLine}>
-        <Image style={styles.thumb} source={item.product.image} />
+        <Image style={styles.thumb} source={{uri: item.imageUrl}} />
         <Text style={styles.lineLeft}>
-          {item.product.name} x {item.qty}
+          {item.title.slice(0, 11)} x {item.qty}
         </Text>
         <Text style={styles.lineRight}>₹ {item.totalPrice}</Text>
       </View>
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   thumb: {
-    height: 70,
+    height: undefined,
+    aspectRatio: 1,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     width: '30%',

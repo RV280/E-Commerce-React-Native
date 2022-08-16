@@ -6,28 +6,41 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
-  ImageSourcePropType,
 } from 'react-native';
 import useCartStore from '../CartZustand';
 
 export type ProductType = {
-  name: string;
+  title: string;
   price: number;
-  image: ImageSourcePropType;
+  imageUrl: string;
   id: number;
 };
 
-export function Product({name, price, image, id}: ProductType): JSX.Element {
+export function Product({
+  title,
+  price,
+  imageUrl,
+  id,
+}: ProductType): JSX.Element {
+  imageUrl = imageUrl
+    ? imageUrl
+    : 'https://cdn2.iconfinder.com/data/icons/admin-tools-2/25/image2-1024.png';
+  price = price ? price : 0;
   const addItemToCart = useCartStore(state => state.addItemToCart);
 
   function onAddToCart(): void {
-    addItemToCart(id);
+    addItemToCart({
+      title,
+      price,
+      imageUrl,
+      id,
+    });
   }
   return (
     <TouchableOpacity style={styles.card}>
-      <Image style={styles.thumb} source={image} />
+      <Image style={styles.thumb} source={{uri: imageUrl}} />
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{title}</Text>
         <Text style={styles.price}>₹ {price}</Text>
         <Button onPress={onAddToCart} title="Add to cart" />
       </View>
