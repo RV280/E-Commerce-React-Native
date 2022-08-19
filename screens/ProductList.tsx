@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {FlatList, StyleSheet, View, ActivityIndicator} from 'react-native';
 
 import {Product} from '../components/Product';
 import axios from 'axios';
+import {useInfiniteQuery} from 'react-query';
 
-type itemType = {
+type ItemType = {
   title: string;
   imageUrl: string;
   price: string;
@@ -24,14 +25,14 @@ export function ProductsList(): JSX.Element {
     return <Product {...product} />;
   }
 
-  const [products, setProducts] = useState([] as itemType[]);
+  const [products, setProducts] = useState([] as ItemType[]);
   const [loader, setLoader] = useState(true);
   const [offset, setOffset] = useState(0);
 
   async function getDataFromServer(url: string) {
     const response = await axios.get(url);
-    let data: itemType[] = products;
-    for (let i = 0; i <= 9; i++) {
+    let data: ItemType[] = products;
+    for (let i = 0; i < 10; i++) {
       if (!data.some(el => el.id === response.data.collections[i + ''].name)) {
         data.push({
           title: response.data.collections[i + ''].name,
@@ -44,16 +45,32 @@ export function ProductsList(): JSX.Element {
 
     setProducts(data);
     setLoader(false);
-    setOffset(offset + 10);
+    return response;
+  }
+  const {fetchNextPage} = useInfiniteQuery(
+    'products',
+    () =>
+      getDataFromServer(
+        `https://api.opensea.io/api/v1/collections?offset=${offset}&limit=10`,
+      ),
+    {
+      onSuccess: () => {
+        setOffset(offset + 10);
+      },
+      getNextPageParam: () => offset,
+    },
+  );
+  function listEnd() {
+    fetchNextPage();
   }
 
-  useEffect(() => {
-    getDataFromServer(
-      'https://api.opensea.io/api/v1/collections?offset=' +
-        offset +
-        '&limit=10',
-    );
-  });
+  // useEffect(() => {
+  //   getDataFromServer(
+  //     'https://api.opensea.io/api/v1/collections?offset=' +
+  //       offset +
+  //       '&limit=10',
+  //   );
+  // });
 
   if (loader) {
     return <Loader />;
@@ -66,6 +83,7 @@ export function ProductsList(): JSX.Element {
         data={products}
         renderItem={renderProduct}
         numColumns={2}
+        onEndReached={listEnd}
       />
     );
   }

@@ -15,16 +15,15 @@ export type ProductType = {
   imageUrl: string;
   id: number;
 };
-
+const DEFAULT_IMAGE_URL =
+  'https://cdn2.iconfinder.com/data/icons/admin-tools-2/25/image2-1024.png';
 export function Product({
   title,
   price,
   imageUrl,
   id,
 }: ProductType): JSX.Element {
-  imageUrl = imageUrl
-    ? imageUrl
-    : 'https://cdn2.iconfinder.com/data/icons/admin-tools-2/25/image2-1024.png';
+  imageUrl = imageUrl ? imageUrl : DEFAULT_IMAGE_URL;
   price = price ? price : 0;
   const addItemToCart = useCartStore(state => state.addItemToCart);
 

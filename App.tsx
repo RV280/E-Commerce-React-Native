@@ -7,35 +7,39 @@ import {ProductsList} from './screens/ProductList';
 import {Cart} from './screens/Cart';
 import {CartIcon} from './components/CartIcon';
 import {LogoIcon} from './components/LogoIcon';
+import {QueryClientProvider, QueryClient} from 'react-query';
 
 const Stack = createNativeStackNavigator();
+const queryClient = new QueryClient();
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Products"
-          component={ProductsList}
-          options={({navigation}) => ({
-            title: 'Store',
-            headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} />,
-            headerLeft: () => <LogoIcon navigation={navigation} />,
-          })}
-        />
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Products"
+            component={ProductsList}
+            options={({navigation}) => ({
+              title: 'Store',
+              headerTitleStyle: styles.headerTitle,
+              headerRight: () => <CartIcon navigation={navigation} />,
+              headerLeft: () => <LogoIcon navigation={navigation} />,
+            })}
+          />
 
-        <Stack.Screen
-          name="Cart"
-          component={Cart}
-          options={({navigation}) => ({
-            title: 'My Cart',
-            headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} />,
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Cart"
+            component={Cart}
+            options={({navigation}) => ({
+              title: 'My Cart',
+              headerTitleStyle: styles.headerTitle,
+              headerRight: () => <CartIcon navigation={navigation} />,
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 
